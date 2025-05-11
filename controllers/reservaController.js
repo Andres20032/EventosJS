@@ -1,22 +1,34 @@
-const Reserva = require('../models/Reserva');
+// src/controllers/reservaController.js
 
-exports.crearReserva = async(req, res) => {
-    const reserva = new Reserva(req.body);
-    await reserva.save();
-    res.json(reserva);
+let reservas = []; // Simula la base de datos
+let id = 1;
+
+// Crear una reserva
+exports.crearReserva = (req, res) => {
+    const nuevaReserva = { id: id++, ...req.body };
+    reservas.push(nuevaReserva);
+    res.status(201).json(nuevaReserva);
 };
 
-exports.obtenerReservas = async(req, res) => {
-    const reservas = await Reserva.find();
+// Obtener todas las reservas
+exports.obtenerReservas = (req, res) => {
     res.json(reservas);
 };
 
-exports.editarReserva = async(req, res) => {
-    const reserva = await Reserva.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(reserva);
+// Editar una reserva
+exports.editarReserva = (req, res) => {
+    const reservaId = parseInt(req.params.id);
+    const index = reservas.findIndex(r => r.id === reservaId);
+    if (index === -1) {
+        return res.status(404).json({ mensaje: 'Reserva no encontrada' });
+    }
+    reservas[index] = { id: reservaId, ...req.body };
+    res.json(reservas[index]);
 };
 
-exports.eliminarReserva = async(req, res) => {
-    await Reserva.findByIdAndDelete(req.params.id);
+// Eliminar una reserva
+exports.eliminarReserva = (req, res) => {
+    const reservaId = parseInt(req.params.id);
+    reservas = reservas.filter(r => r.id !== reservaId);
     res.json({ mensaje: 'Reserva eliminada' });
 };
