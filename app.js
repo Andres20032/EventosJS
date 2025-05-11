@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.use('/api/eventos', require('./routes/eventoRoutes'));
 app.use('/api/usuarios', require('./routes/usuarioRoutes'));
-app.use('/api/reservas', require('./routes/reservaRoutes'));
+app.use('/api/reservas', require('./routes/ReservaRoutes'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
